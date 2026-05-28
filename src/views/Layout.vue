@@ -69,12 +69,13 @@ const logoTitle = computed(() => {
 
 // 所有菜单项
 const allMenuItems = [
-  { path: '/dashboard', title: '概览', icon: 'Odometer', superOnly: false, feature: '' },
+  { path: '/dashboard', title: '概览', icon: 'Odometer', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/stores', title: '店铺管理', icon: 'Shop', superOnly: true, feature: '' },
+  { path: '/store-profile', title: '店铺信息', icon: 'Shop', superOnly: false, feature: '' },
   { path: '/bookings', title: '预约列表', icon: 'List', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/availability', title: '可用性配置', icon: 'Calendar', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/preview', title: '页面预览', icon: 'View', superOnly: false, feature: '' },
-  { path: '/api-info', title: '接口信息', icon: 'Connection', superOnly: false, feature: '' },
+  { path: '/api-info', title: '接口信息', icon: 'Connection', superOnly: true, feature: '' },
 ];
 
 // 根据权限过滤菜单
@@ -85,9 +86,9 @@ const visibleMenuItems = computed(() => {
       return true;
     }
 
-    // 店铺用户：只看自己店铺开启的功能
+    // 店铺用户：超管专属菜单不显示
     if (item.superOnly) {
-      return false; // 店铺用户看不到超管专属菜单
+      return false;
     }
 
     // 没有功能限制的菜单，所有用户都能看
