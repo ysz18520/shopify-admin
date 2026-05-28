@@ -8,7 +8,35 @@
     </div>
 
     <el-table :data="stores" style="width: 100%" v-loading="loading">
-      <el-table-column prop="name" label="店铺名称" width="400" />
+      <el-table-column prop="name" label="店铺名称" width="150" />
+      <el-table-column label="登录账号" width="120">
+        <template #default="{ row }">
+          <span v-if="row.users && row.users.length > 0">{{ row.users[0].username }}</span>
+          <span v-else style="color: #999">未创建</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="登录密码" width="120">
+        <template #default="{ row }">
+          <span v-if="row.users && row.users.length > 0">{{ row.name }}</span>
+          <span v-else style="color: #999">-</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="预约功能" width="100" align="center">
+        <template #default="{ row }">
+          <el-switch
+            v-model="row.isBookingEnabled"
+            @change="handleToggleFeature(row.name, 'isBookingEnabled', row.isBookingEnabled)"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column label="投票功能" width="100" align="center">
+        <template #default="{ row }">
+          <el-switch
+            v-model="row.isVotingEnabled"
+            @change="handleToggleFeature(row.name, 'isVotingEnabled', row.isVotingEnabled)"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="180" fixed="right">
         <template #default="{ row }">
           <el-button size="small" @click="showEditDialog(row)">编辑</el-button>
@@ -36,6 +64,10 @@
           <div class="form-tip">小写字母、数字和连字符，也是 API 中使用的 site 标识</div>
         </el-form-item>
       </el-form>
+      <div class="dialog-tip">
+        <el-icon><InfoFilled /></el-icon>
+        添加后会自动创建登录账号（账号密码均为店铺名称）
+      </div>
       <template #footer>
         <el-button @click="addDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleAdd" :loading="submitting">添加</el-button>
@@ -68,12 +100,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { Plus } from '@element-plus/icons-vue';
+import { Plus, InfoFilled } from '@element-plus/icons-vue';
 import request from '@/api/request';
 
 interface Store {
   id: string;
   name: string;
+  isBookingEnabled: boolean;
+  isVotingEnabled: boolean;
+  users?: Array<{ id: string; username: string; role: string }>;
 }
 
 const stores = ref<Store[]>([]);
@@ -121,8 +156,8 @@ async function handleAdd() {
 
   submitting.value = true;
   try {
-    await request.post('/admin/stores', addForm.value);
-    ElMessage.success('店铺已添加');
+    const res: any = await request.post('/admin/stores', addForm.value);
+    ElMessage.success(`店铺已添加，登录账号：${res.name}，密码：${res.name}`);
     addDialogVisible.value = false;
     loadStores();
   } catch (error: any) {
@@ -144,7 +179,6 @@ async function handleEdit() {
     return;
   }
 
-  // 确认修改
   try {
     await ElMessageBox.confirm(
       `确定将店铺标识从 "${editingStore.value.name}" 修改为 "${editForm.value.name}" 吗？\n\n这会同步更新预约等功能中的相关数据。`,
@@ -152,12 +186,12 @@ async function handleEdit() {
       { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
     );
   } catch {
-    return; // 用户取消
+    return;
   }
 
   submitting.value = true;
   try {
-    await request.put(`/admin/stores/${editingStore.value.name}`, editForm.value);
+    await request.put(`/admin/stores/${editingStore.value.name}/rename`, editForm.value);
     ElMessage.success('店铺已更新');
     editDialogVisible.value = false;
     loadStores();
@@ -169,6 +203,17 @@ async function handleEdit() {
   }
 }
 
+async function handleToggleFeature(storeName: string, field: string, value: boolean) {
+  try {
+    await request.put(`/admin/stores/${storeName}`, { [field]: value });
+    ElMessage.success('功能已更新');
+  } catch (error: any) {
+    const msg = error.response?.data?.error || '操作失败';
+    ElMessage.error(msg);
+    loadStores(); // 恢复开关状态
+  }
+}
+
 async function handleDelete(name: string) {
   try {
     await ElMessageBox.confirm(
@@ -177,7 +222,7 @@ async function handleDelete(name: string) {
       { confirmButtonText: '确定删除', cancelButtonText: '取消', type: 'warning' }
     );
   } catch {
-    return; // 用户取消
+    return;
   }
 
   try {
@@ -211,5 +256,15 @@ async function handleDelete(name: string) {
   font-size: 12px;
   color: #999;
   margin-top: 4px;
+}
+.dialog-tip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: #f5f7fa;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #666;
 }
 </style>

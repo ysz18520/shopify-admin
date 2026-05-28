@@ -13,7 +13,7 @@
         text-color="#bfcbd9"
         active-text-color="#409eff"
       >
-        <el-menu-item v-for="item in menuItems" :key="item.path" :index="item.path">
+        <el-menu-item v-for="item in visibleMenuItems" :key="item.path" :index="item.path">
           <el-icon>
             <component :is="item.icon" />
           </el-icon>
@@ -67,17 +67,48 @@ const logoTitle = computed(() => {
   return `管理后台 - ${authStore.site}`;
 });
 
-const menuItems = [
-  { path: '/dashboard', title: '概览', icon: 'Odometer' },
-  { path: '/stores', title: '店铺管理', icon: 'Shop' },
-  { path: '/bookings', title: '预约列表', icon: 'List' },
-  { path: '/availability', title: '可用性配置', icon: 'Calendar' },
-  { path: '/preview', title: '页面预览', icon: 'View' },
-  { path: '/api-info', title: '接口信息', icon: 'Connection' },
+// 所有菜单项
+const allMenuItems = [
+  { path: '/dashboard', title: '概览', icon: 'Odometer', superOnly: false, feature: '' },
+  { path: '/stores', title: '店铺管理', icon: 'Shop', superOnly: true, feature: '' },
+  { path: '/bookings', title: '预约列表', icon: 'List', superOnly: false, feature: 'isBookingEnabled' },
+  { path: '/availability', title: '可用性配置', icon: 'Calendar', superOnly: false, feature: 'isBookingEnabled' },
+  { path: '/preview', title: '页面预览', icon: 'View', superOnly: false, feature: '' },
+  { path: '/api-info', title: '接口信息', icon: 'Connection', superOnly: false, feature: '' },
 ];
 
+// 根据权限过滤菜单
+const visibleMenuItems = computed(() => {
+  return allMenuItems.filter(item => {
+    // 超管可以看到所有非功能限制的菜单
+    if (authStore.isSuper) {
+      return true;
+    }
+
+    // 店铺用户：只看自己店铺开启的功能
+    if (item.superOnly) {
+      return false; // 店铺用户看不到超管专属菜单
+    }
+
+    // 没有功能限制的菜单，所有用户都能看
+    if (!item.feature) {
+      return true;
+    }
+
+    // 有功能限制的菜单，需要检查开关
+    if (item.feature === 'isBookingEnabled') {
+      return authStore.isBookingEnabled;
+    }
+    if (item.feature === 'isVotingEnabled') {
+      return authStore.isVotingEnabled;
+    }
+
+    return true;
+  });
+});
+
 const currentTitle = computed(() => {
-  const item = menuItems.find((m) => m.path === route.path);
+  const item = allMenuItems.find((m) => m.path === route.path);
   return item?.title || '管理后台';
 });
 
