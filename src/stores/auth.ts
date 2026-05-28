@@ -39,6 +39,11 @@ export const useAuthStore = defineStore('auth', () => {
         await fetchStoreFeatures(res.site);
       }
 
+      // 如果是超管且有 viewSite，获取该店铺功能开关
+      if (res.role === 'super' && viewSite.value) {
+        await fetchStoreFeatures(viewSite.value);
+      }
+
       return true;
     } catch {
       return false;
