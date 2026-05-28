@@ -46,6 +46,12 @@ const router = createRouter({
           meta: { title: '可用性配置', icon: 'Calendar' },
         },
         {
+          path: 'designs',
+          name: 'DesignList',
+          component: () => import('@/views/DesignList.vue'),
+          meta: { title: '设计管理', icon: 'Picture', feature: 'isVotingEnabled' },
+        },
+        {
           path: 'api-info',
           name: 'ApiInfo',
           component: () => import('@/views/ApiInfo.vue'),
