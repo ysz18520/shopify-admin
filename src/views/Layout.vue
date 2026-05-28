@@ -69,6 +69,7 @@ const logoTitle = computed(() => {
 
 const menuItems = [
   { path: '/dashboard', title: '概览', icon: 'Odometer' },
+  { path: '/stores', title: '店铺管理', icon: 'Shop' },
   { path: '/bookings', title: '预约列表', icon: 'List' },
   { path: '/availability', title: '可用性配置', icon: 'Calendar' },
   { path: '/preview', title: '页面预览', icon: 'View' },

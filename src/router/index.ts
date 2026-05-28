@@ -22,6 +22,12 @@ const router = createRouter({
           meta: { title: '概览', icon: 'Odometer' },
         },
         {
+          path: 'stores',
+          name: 'StoreList',
+          component: () => import('@/views/StoreList.vue'),
+          meta: { title: '店铺管理', icon: 'Shop' },
+        },
+        {
           path: 'bookings',
           name: 'BookingList',
           component: () => import('@/views/BookingList.vue'),
