@@ -109,9 +109,7 @@
           >
             <template #title>上线迁移提示</template>
             测试完成后，将上方页面源码中的
-            <code>API_BASE = 'http://107.172.230.133:8080/api'</code>
-            改为你的生产域名（如
-            <code>'https://your-domain.com/api'</code>
+            <code>API_BASE = 'https://api.sifanonline.com/api'</code>
             ），然后将整个 HTML 文件内容复制到 Shopify 主题中作为 Liquid 模板即可。
           </el-alert>
         </el-card>
