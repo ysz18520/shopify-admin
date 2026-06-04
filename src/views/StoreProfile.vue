@@ -16,8 +16,7 @@
         <el-form-item label="已开启功能">
           <div class="features">
             <el-tag v-if="form.isBookingEnabled" type="success">预约功能</el-tag>
-            <el-tag v-if="form.isVotingEnabled" type="success">投票功能</el-tag>
-            <el-tag v-if="!form.isBookingEnabled && !form.isVotingEnabled" type="info">暂无功能</el-tag>
+            <el-tag v-if="!form.isBookingEnabled" type="info">暂无功能</el-tag>
           </div>
         </el-form-item>
       </el-form>
@@ -38,7 +37,6 @@ const form = ref({
   name: '',
   username: '',
   isBookingEnabled: false,
-  isVotingEnabled: false,
 });
 
 onMounted(() => {
@@ -53,7 +51,6 @@ async function loadStoreInfo() {
       name: store.name,
       username: store.users?.[0]?.username || store.name,
       isBookingEnabled: store.isBookingEnabled,
-      isVotingEnabled: store.isVotingEnabled,
     };
   } catch (error) {
     ElMessage.error('加载店铺信息失败');

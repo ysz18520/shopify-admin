@@ -12,7 +12,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   // 店铺功能开关
   const isBookingEnabled = ref(false);
-  const isVotingEnabled = ref(false);
 
   const isLoggedIn = computed(() => !!token.value);
   const isSuper = computed(() => role.value === 'super');
@@ -54,10 +53,8 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const store: any = await request.get(`/admin/stores/${siteName}`);
       isBookingEnabled.value = store.isBookingEnabled || false;
-      isVotingEnabled.value = store.isVotingEnabled || false;
     } catch {
       isBookingEnabled.value = false;
-      isVotingEnabled.value = false;
     }
   }
 
@@ -77,7 +74,6 @@ export const useAuthStore = defineStore('auth', () => {
     site.value = '';
     viewSite.value = '';
     isBookingEnabled.value = false;
-    isVotingEnabled.value = false;
 
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_username');
@@ -88,7 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     token, username, role, site, viewSite, currentSite,
-    isBookingEnabled, isVotingEnabled,
+    isBookingEnabled,
     isLoggedIn, isSuper,
     login, logout, setViewSite, fetchStoreFeatures
   };

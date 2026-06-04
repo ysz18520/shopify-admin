@@ -74,7 +74,6 @@ const allMenuItems = [
   { path: '/store-profile', title: '店铺信息', icon: 'Shop', superOnly: false, feature: '' },
   { path: '/bookings', title: '预约列表', icon: 'List', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/availability', title: '可用性配置', icon: 'Calendar', superOnly: false, feature: 'isBookingEnabled' },
-  { path: '/designs', title: '设计管理', icon: 'Picture', superOnly: false, feature: 'isVotingEnabled' },
   { path: '/preview', title: '页面预览', icon: 'View', superOnly: false, feature: '' },
   { path: '/api-info', title: '接口信息', icon: 'Connection', superOnly: true, feature: '' },
 ];
@@ -100,9 +99,6 @@ const visibleMenuItems = computed(() => {
     // 有功能限制的菜单，需要检查开关
     if (item.feature === 'isBookingEnabled') {
       return authStore.isBookingEnabled;
-    }
-    if (item.feature === 'isVotingEnabled') {
-      return authStore.isVotingEnabled;
     }
 
     return true;

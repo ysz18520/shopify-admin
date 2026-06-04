@@ -29,14 +29,6 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="投票功能" width="100" align="center">
-        <template #default="{ row }">
-          <el-switch
-            v-model="row.isVotingEnabled"
-            @change="handleToggleFeature(row.name, 'isVotingEnabled', row.isVotingEnabled)"
-          />
-        </template>
-      </el-table-column>
       <el-table-column label="操作" width="180" fixed="right">
         <template #default="{ row }">
           <el-button size="small" @click="showEditDialog(row)">编辑</el-button>
@@ -107,7 +99,6 @@ interface Store {
   id: string;
   name: string;
   isBookingEnabled: boolean;
-  isVotingEnabled: boolean;
   users?: Array<{ id: string; username: string; role: string }>;
 }
 
