@@ -71,7 +71,7 @@ const logoTitle = computed(() => {
 const allMenuItems = [
   { path: '/dashboard', title: '概览', icon: 'Odometer', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/stores', title: '店铺管理', icon: 'Shop', superOnly: true, feature: '' },
-  { path: '/store-profile', title: '店铺信息', icon: 'Shop', superOnly: false, feature: '' },
+  { path: '/store-profile', title: '店铺信息', icon: 'Shop', superOnly: false, siteOnly: true, feature: '' },
   { path: '/bookings', title: '预约列表', icon: 'List', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/availability', title: '可用性配置', icon: 'Calendar', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/preview', title: '页面预览', icon: 'View', superOnly: false, feature: '' },
@@ -81,9 +81,9 @@ const allMenuItems = [
 // 根据权限过滤菜单
 const visibleMenuItems = computed(() => {
   return allMenuItems.filter(item => {
-    // 超管可以看到所有非功能限制的菜单
+    // 超管：不显示店铺专属菜单（如店铺信息）
     if (authStore.isSuper) {
-      return true;
+      return !item.siteOnly;
     }
 
     // 店铺用户：超管专属菜单不显示
