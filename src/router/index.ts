@@ -46,6 +46,12 @@ const router = createRouter({
           meta: { title: '可用性配置', icon: 'Calendar' },
         },
         {
+          path: 'files',
+          name: 'FileList',
+          component: () => import('@/views/FileList.vue'),
+          meta: { title: '文件管理', icon: 'Folder' },
+        },
+        {
           path: 'api-info',
           name: 'ApiInfo',
           component: () => import('@/views/ApiInfo.vue'),

@@ -120,3 +120,43 @@ export function removeHoliday(id: string, site?: string): Promise<{ success: boo
     params: { site },
   }) as Promise<{ success: boolean }>;
 }
+
+// === 文件管理 ===
+
+export interface UploadedFileRecord {
+  id: string;
+  site: string;
+  fileName: string;
+  fileKey: string;
+  fileUrl: string;
+  fileSize: number;
+  mimeType: string;
+  uploadedBy: string | null;
+  createdAt: string;
+}
+
+export interface FileListResponse {
+  files: UploadedFileRecord[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export function getFileList(page = 1, pageSize = 20, site?: string): Promise<FileListResponse> {
+  return request.get('/admin/files', {
+    params: { page, pageSize, site },
+  }) as Promise<FileListResponse>;
+}
+
+export function deleteFile(id: string, site?: string): Promise<{ success: boolean }> {
+  return request.delete(`/admin/files/${id}`, {
+    params: { site },
+  }) as Promise<{ success: boolean }>;
+}
+
+export function updateStoreUploadConfig(
+  name: string,
+  data: { maxFileSize?: number; allowedFileTypes?: string }
+): Promise<any> {
+  return request.put(`/admin/stores/${name}`, data) as Promise<any>;
+}

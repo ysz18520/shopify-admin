@@ -75,6 +75,7 @@ const allMenuItems = [
   { path: '/bookings', title: '预约列表', icon: 'List', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/availability', title: '可用性配置', icon: 'Calendar', superOnly: false, feature: 'isBookingEnabled' },
   { path: '/preview', title: '页面预览', icon: 'View', superOnly: false, feature: '' },
+  { path: '/files', title: '文件管理', icon: 'Folder', superOnly: false, feature: '' },
   { path: '/api-info', title: '接口信息', icon: 'Connection', superOnly: true, feature: '' },
 ];
 
