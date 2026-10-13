@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apopresent - Instant Quote</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #FFF8E7 0%, #FFEFD5 50%, #FFF0DB 100%);
+      min-height: 100vh;
+    }
+
+    /* 顶部红色品牌栏 */
+    .brand-bar {
+      background: #E62129;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo .icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #FFD700, #DAA520);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 22px;
+      color: #E62129;
+      position: relative;
+    }
+
+    .brand-logo .icon::after {
+      content: '🎁';
+      font-size: 14px;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+    }
+
+    .brand-logo .name {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* 主容器 - 左表单 + 右人物图 */
+    .main-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 56px);
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 右侧人物装饰 */
+    .side-image {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 85%;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* 表单卡片 */
+    .form-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 36px 40px 32px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-title {
+      color: #B8860B;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 28px;
+      line-height: 1.3;
+    }
+
+    /* 表单项 */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #8B6914;
+      margin-bottom: 6px;
+    }
+
+    .form-group select,
+    .form-group input[type="text"],
+    .form-group input[type="email"] {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1px solid #D1D1D1;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus {
+      border-color: #E62129;
+      box-shadow: 0 0 0 3px rgba(230, 33, 41, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: #999;
+    }
+
+    /* 文件上传区域 */
+    .file-upload-area {
+      border: 2px dashed #D1D1D1;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .file-upload-area:hover {
+      border-color: #E62129;
+      background: rgba(230, 33, 41, 0.02);
+    }
+
+    .file-upload-area.has-file {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.04);
+    }
+
+    .file-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-upload-icon {
+      font-size: 24px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    .file-upload-text {
+      font-size: 13px;
+      color: #999;
+    }
+
+    .file-upload-text span {
+      color: #E62129;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .file-name-display {
+      font-size: 13px;
+      color: #4CAF50;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* 提交按钮 */
+    .submit-btn {
+      width: 100%;
+      height: 50px;
+      background: #E62129;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 24px;
+      letter-spacing: 0.3px;
+    }
+
+    .submit-btn:hover {
+      background: #D01820;
+    }
+
+    .submit-btn:active {
+      background: #B9151B;
+    }
+
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .helper-text {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin-top: 14px;
+    }
+
+    /* 结果弹窗 */
+    .result-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-overlay.show {
+      display: flex;
+    }
+
+    .result-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px 40px;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .result-card .success-icon {
+      width: 64px;
+      height: 64px;
+      background: #E8F5E9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 32px;
+    }
+
+    .result-card h3 {
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .result-card .detail-table {
+      text-align: left;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .result-card .detail-table tr td {
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .result-card .detail-table tr td:first-child {
+      color: #888;
+      width: 120px;
+    }
+
+    .result-card .detail-table tr td:last-child {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .result-card .close-btn {
+      margin-top: 20px;
+      padding: 10px 32px;
+      background: #E62129;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .result-card .close-btn:hover {
+      background: #D01820;
+    }
+
+    /* 错误提示 */
+    .error-toast {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #E62129;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 2000;
+      box-shadow: 0 4px 16px rgba(230, 33, 41, 0.3);
+    }
+
+    .error-toast.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* API调试面板 */
+    .debug-panel {
+      margin-top: 20px;
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 520px;
+      width: 100%;
+      z-index: 1;
+      position: relative;
+    }
+
+    .debug-panel h4 {
+      color: #4ec9b0;
+      font-size: 13px;
+      margin-bottom: 12px;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    .debug-panel pre {
+      color: #d4d4d4;
+      font-size: 12px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    .debug-panel .api-label {
+      color: #569cd6;
+    }
+
+    .debug-panel .success { color: #4ec9b0; }
+    .debug-panel .error { color: #f44747; }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部品牌栏 -->
+  <div class="brand-bar">
+    <div class="brand-logo">
+      <div class="icon">A</div>
+      <span class="name">Apopresent</span>
+    </div>
+  </div>
+
+  <!-- 主内容区 -->
+  <div class="main-wrapper">
+    <!-- 表单卡片 -->
+    <div class="form-card">
+      <h2 class="form-title">Instant Quote in 30 Seconds</h2>
+
+      <form id="quoteForm" onsubmit="return false;">
+        <!-- Card Type -->
+        <div class="form-group">
+          <label>Card Type</label>
+          <select name="cardType" id="cardTypeSelect">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+
+        <!-- Quantity -->
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="text" name="quantity" placeholder="e.g. 100" />
+        </div>
+
+        <!-- Budget Range -->
+        <div class="form-group">
+          <label>Budget Range</label>
+          <select name="budgetRange" id="budgetRangeSelect">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+
+        <!-- Email Address -->
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="your@email.com" />
+        </div>
+
+        <!-- File Upload -->
+        <div class="form-group">
+          <label>Upload File (Optional)</label>
+          <div class="file-upload-area" id="fileArea">
+            <input type="file" name="file" id="fileInput" />
+            <div class="file-upload-icon">📄</div>
+            <div class="file-upload-text" id="fileText">
+              <span>Click to upload</span> or drag and drop
+            </div>
+            <div class="file-name-display" id="fileName" style="display:none;"></div>
+          </div>
+        </div>
+
+        <button type="button" class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+          Get Instant Quote Now
+        </button>
+
+        <p class="helper-text">Average response time: 2 hours | 48h sampling</p>
+      </form>
+    </div>
+
+    <!-- 调试面板 -->
+    <div class="debug-panel" id="debugPanel" style="display:none;">
+      <h4>📡 API Debug Log</h4>
+      <pre id="debugLog"></pre>
+    </div>
+  </div>
+
+  <!-- 成功弹窗 -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-card">
+      <div class="success-icon">✅</div>
+      <h3>Quote Submitted!</h3>
+      <table class="detail-table" id="resultTable"></table>
+      <button class="close-btn" onclick="closeResult()">OK</button>
+    </div>
+  </div>
+
+  <!-- 错误提示 -->
+  <div class="error-toast" id="errorToast"></div>
+
+  <script>
+    // ========== 配置 ==========
+    // 部署在管理后台预览时用相对路径，Shopify 上线时改为 https://api.sifanonline.com/api
+    const API_BASE = '/api';
+    // const API_BASE = 'https://api.sifanonline.com/api';  // Shopify 上线
+    // const API_BASE = 'http://localhost:3000/api';  // 本地开发
+    const SITE = 'apopresent';
+
+    // ========== 调试日志 ==========
+    function debugLog(type, msg, data) {
+      const panel = document.getElementById('debugPanel');
+      const log = document.getElementById('debugLog');
+      panel.style.display = 'block';
+
+      const cls = type === 'req' ? 'api-label' : type === 'ok' ? 'success' : 'error';
+      const icon = type === 'req' ? '→' : type === 'ok' ? '✓' : '✗';
+
+      let line = `<span class="${cls}">${icon} ${msg}</span>`;
+      if (data) line += '\n' + JSON.stringify(data, null, 2);
+
+      log.innerHTML += line + '\n\n';
+    }
+
+    // ========== 加载下拉选项 ==========
+    async function loadOptions() {
+      try {
+        const [cardTypes, budgetRanges] = await Promise.all([
+          fetch(`${API_BASE}/coollaa/quote/options?site=${SITE}&field=cardType`).then(r => r.json()),
+          fetch(`${API_BASE}/coollaa/quote/options?site=${SITE}&field=budgetRange`).then(r => r.json()),
+        ]);
+
+        debugLog('ok', `GET /coollaa/quote/options?field=cardType → ${cardTypes.length} options`, cardTypes);
+        debugLog('ok', `GET /coollaa/quote/options?field=budgetRange → ${budgetRanges.length} options`, budgetRanges);
+
+        // 渲染 Card Type
+        const ctSelect = document.getElementById('cardTypeSelect');
+        ctSelect.innerHTML = '<option value="">Select...</option>' +
+          cardTypes.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+
+        // 渲染 Budget Range
+        const brSelect = document.getElementById('budgetRangeSelect');
+        brSelect.innerHTML = '<option value="">Select...</option>' +
+          budgetRanges.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+
+      } catch (err) {
+        debugLog('err', 'Failed to load options: ' + err.message);
+        document.getElementById('cardTypeSelect').innerHTML = '<option value="">Failed to load</option>';
+        document.getElementById('budgetRangeSelect').innerHTML = '<option value="">Failed to load</option>';
+      }
+    }
+
+    // ========== 文件选择 ==========
+    document.getElementById('fileInput').addEventListener('change', function() {
+      const area = document.getElementById('fileArea');
+      const nameEl = document.getElementById('fileName');
+      const textEl = document.getElementById('fileText');
+
+      if (this.files && this.files[0]) {
+        const file = this.files[0];
+        nameEl.textContent = `📎 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+        nameEl.style.display = 'block';
+        textEl.style.display = 'none';
+        area.classList.add('has-file');
+      } else {
+        nameEl.style.display = 'none';
+        textEl.style.display = 'block';
+        area.classList.remove('has-file');
+      }
+    });
+
+    // ========== 提交报价 ==========
+    async function handleSubmit() {
+      const form = document.getElementById('quoteForm');
+      const btn = document.getElementById('submitBtn');
+      const formData = new FormData(form);
+
+      // 基础校验
+      const email = formData.get('email');
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Please enter a valid email address');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      debugLog('req', `POST /coollaa/quote?site=${SITE}`, {
+        cardType: formData.get('cardType') || '(empty)',
+        quantity: formData.get('quantity') || '(empty)',
+        budgetRange: formData.get('budgetRange') || '(empty)',
+        email: formData.get('email') || '(empty)',
+        file: formData.get('file')?.name || '(no file)',
+      });
+
+      try {
+        const response = await fetch(`${API_BASE}/coollaa/quote?site=${SITE}`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          debugLog('ok', `${response.status} Created — ID: ${result.id}`, result);
+          showResult(result);
+        } else {
+          debugLog('err', `${response.status} Error — ${result.error}`, result);
+          showError(result.error || 'Submission failed');
+        }
+      } catch (err) {
+        debugLog('err', 'Network error: ' + err.message);
+        showError('Network error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Get Instant Quote Now';
+      }
+    }
+
+    // ========== 显示结果 ==========
+    function showResult(data) {
+      const table = document.getElementById('resultTable');
+      const rows = [
+        ['Reference ID', data.id],
+        ['Card Type', data.formData?.cardType || '-'],
+        ['Quantity', data.formData?.quantity || '-'],
+        ['Budget Range', data.formData?.budgetRange || '-'],
+        ['Email', data.formData?.email || '-'],
+        ['File', data.fileUrl ? `<a href="${data.fileUrl}" target="_blank" style="color:#E62129">View File</a>` : 'No file'],
+        ['Status', data.status],
+        ['Submitted', new Date(data.createdAt).toLocaleString()],
+      ];
+
+      table.innerHTML = rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+      document.getElementById('resultOverlay').classList.add('show');
+    }
+
+    function closeResult() {
+      document.getElementById('resultOverlay').classList.remove('show');
+    }
+
+    // ========== 错误提示 ==========
+    function showError(msg) {
+      const toast = document.getElementById('errorToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    // ========== 初始化 ==========
+    loadOptions();
+  </script>
+</body>
+</html>

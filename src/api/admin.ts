@@ -123,40 +123,91 @@ export function removeHoliday(id: string, site?: string): Promise<{ success: boo
 
 // === 文件管理 ===
 
-export interface UploadedFileRecord {
-  id: string;
-  site: string;
-  fileName: string;
-  fileKey: string;
-  fileUrl: string;
-  fileSize: number;
-  mimeType: string;
-  uploadedBy: string | null;
-  createdAt: string;
-}
-
-export interface FileListResponse {
-  files: UploadedFileRecord[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
-export function getFileList(page = 1, pageSize = 20, site?: string): Promise<FileListResponse> {
-  return request.get('/admin/files', {
-    params: { page, pageSize, site },
-  }) as Promise<FileListResponse>;
-}
-
-export function deleteFile(id: string, site?: string): Promise<{ success: boolean }> {
-  return request.delete(`/admin/files/${id}`, {
-    params: { site },
-  }) as Promise<{ success: boolean }>;
-}
-
 export function updateStoreUploadConfig(
   name: string,
   data: { maxFileSize?: number; allowedFileTypes?: string }
 ): Promise<any> {
   return request.put(`/admin/stores/${name}`, data) as Promise<any>;
+}
+
+// === 报价管理 ===
+
+export interface QuoteRecord {
+  id: string;
+  site: string;
+  formData: Record<string, string>;
+  fileId: string | null;
+  fileUrl: string | null;
+  fileName: string | null;
+  status: string;
+  createdAt: string;
+}
+
+export interface QuoteListResponse {
+  quotes: QuoteRecord[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export function getQuoteList(page = 1, pageSize = 20, site?: string): Promise<QuoteListResponse> {
+  return request.get('/admin/quotes', {
+    params: { page, pageSize, site },
+  }) as Promise<QuoteListResponse>;
+}
+
+export function updateQuoteStatus(id: string, status: string, site?: string): Promise<any> {
+  return request.put(`/admin/quotes/${id}/status`, { status }, {
+    params: { site },
+  }) as Promise<any>;
+}
+
+export function deleteQuote(id: string, site?: string): Promise<{ success: boolean }> {
+  return request.delete(`/admin/quotes/${id}`, {
+    params: { site },
+  }) as Promise<{ success: boolean }>;
+}
+
+export function downloadQuoteFile(id: string, site?: string): Promise<{ downloadUrl: string; fileName: string }> {
+  return request.get(`/admin/quotes/${id}/download`, {
+    params: { site },
+  }) as Promise<{ downloadUrl: string; fileName: string }>;
+}
+
+// === 表单选项管理 ===
+
+export interface FormOptionRecord {
+  id: string;
+  site: string;
+  fieldKey: string;
+  label: string;
+  value: string;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+export function getFormOptions(site?: string): Promise<FormOptionRecord[]> {
+  return request.get('/admin/form-options', {
+    params: { site },
+  }) as Promise<FormOptionRecord[]>;
+}
+
+export function createFormOption(data: {
+  site: string;
+  fieldKey: string;
+  label: string;
+  value: string;
+}): Promise<FormOptionRecord> {
+  return request.post('/admin/form-options', data) as Promise<FormOptionRecord>;
+}
+
+export function updateFormOption(
+  id: string,
+  data: { label?: string; value?: string; sortOrder?: number; isActive?: boolean }
+): Promise<FormOptionRecord> {
+  return request.put(`/admin/form-options/${id}`, data) as Promise<FormOptionRecord>;
+}
+
+export function deleteFormOption(id: string): Promise<{ success: boolean }> {
+  return request.delete(`/admin/form-options/${id}`) as Promise<{ success: boolean }>;
 }

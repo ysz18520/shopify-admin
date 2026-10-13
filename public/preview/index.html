@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>开发测试环境</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+    .header {
+      background: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .header h1 { font-size: 24px; }
+    .header p { color: #999; margin-top: 6px; }
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .site-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    .site-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .site-card h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .module-list {
+      list-style: none;
+    }
+    .module-list li {
+      margin-bottom: 10px;
+    }
+    .module-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #333;
+      background: #f8f9fa;
+      transition: all 0.2s;
+    }
+    .module-list a:hover {
+      background: #e8f4fd;
+      color: #1976d2;
+    }
+    .module-list .tag {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    .notice {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+    .notice strong { color: #e65100; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>开发测试环境</h1>
+    <p>纯 HTML + CSS + JS 页面，测试完成后可直接搬运到 Shopify</p>
+  </div>
+
+  <div class="container">
+    <div class="notice">
+      <strong>说明：</strong>此目录下的所有页面均使用原生 HTML/CSS/JS 编写，不依赖任何框架。测试确认功能无误后，可直接将代码迁移到 Shopify 主题中。
+    </div>
+
+    <div class="site-grid">
+      <div class="site-card">
+        <h2>Apopresent</h2>
+        <ul class="module-list">
+          <li>
+            <a href="coollaa/quote.html">
+              <span>报价表单</span>
+              <span class="tag">quote</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="site-card">
+        <h2>Coollaa</h2>
+        <ul class="module-list">
+          <li>
+            <a href="coollaa/booking.html">
+              <span>预约功能</span>
+              <span class="tag">booking</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="site-card">
+        <h2>Longshade</h2>
+        <ul class="module-list">
+          <li>
+            <a href="#">
+              <span>暂无模块</span>
+              <span class="tag">待开发</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="site-card">
+        <h2>Mypicmag</h2>
+        <ul class="module-list">
+          <li>
+            <a href="#">
+              <span>暂无模块</span>
+              <span class="tag">待开发</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

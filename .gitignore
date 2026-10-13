@@ -5,3 +5,5 @@ dist
 *.log
 .DS_Store
 .claude/
+# 后端API（独立git仓库，单独管理）
+backend/

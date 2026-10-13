@@ -46,10 +46,10 @@ const router = createRouter({
           meta: { title: '可用性配置', icon: 'Calendar' },
         },
         {
-          path: 'files',
-          name: 'FileList',
-          component: () => import('@/views/FileList.vue'),
-          meta: { title: '文件管理', icon: 'Folder' },
+          path: 'quotes',
+          name: 'QuoteList',
+          component: () => import('@/views/QuoteList.vue'),
+          meta: { title: '报价管理', icon: 'Document' },
         },
         {
           path: 'api-info',

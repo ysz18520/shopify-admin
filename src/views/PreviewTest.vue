@@ -133,10 +133,19 @@ interface PreviewPage {
 }
 
 const authStore = useAuthStore();
-const allSites = ['coollaa', 'longshade'];
+const allSites = ['apopresent', 'coollaa', 'longshade'];
 const selectedSite = ref(authStore.viewSite || '');
 
 const pageList: PreviewPage[] = [
+  {
+    name: '报价表单 - Apopresent',
+    path: '/preview/coollaa/quote.html',
+    site: 'Apopresent',
+    desc: 'Instant Quote 报价表单：Card Type / Quantity / Budget Range / Email / 文件上传。原生 HTML+CSS+JS，零依赖。',
+    status: '已完成',
+    statusType: 'success',
+    sourcePath: 'shopify网站后端/dev-test/coollaa/quote.html',
+  },
   {
     name: '预约咨询 - Coollaa',
     path: '/preview/coollaa/booking.html',
